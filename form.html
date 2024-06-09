@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purchase Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .form-container {
+            max-width: 400px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        .form-group button {
+            padding: 10px 15px;
+            margin-right: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .form-group button[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .form-group button[type="reset"] {
+            background-color: #f44336;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>Purchase Form</h2>
+    <form id="purchaseForm">
+        <div class="form-group">
+            <label for="clientName">Client Name:</label>
+            <input type="text" id="clientName" name="clientName" required>
+        </div>
+        <div class="form-group">
+            <label for="value">Value:</label>
+            <input type="number" id="value" name="value" required>
+        </div>
+        <div class="form-group">
+            <label for="purchaseDate">Purchase Date:</label>
+            <input type="date" id="purchaseDate" name="purchaseDate" required>
+        </div>
+        <div class="form-group">
+            <label for="productName">Product Name:</label>
+            <input type="text" id="productName" name="productName" required>
+        </div>
+        <div class="form-group">
+            <label for="Presentation_id">Presentation ID:</label>
+            <input type="text" id="Presentation_id" name="presentation_ID" value="1KbJu8gkd4ADeKw7FADwc9OcDsdD69nhLcuJfwWesygw" required>
+        </div>
+        <div class="form-group">
+            <button type="submit">Submit</button>
+            <button type="reset">Clear</button>
+        </div>
+    </form>
+</div>
+
+
+
+
+<script>
+    document.getElementById('purchaseForm').addEventListener('submit', function (event) {
+        event.preventDefault(); // Prevent form from submitting the traditional way
+
+        const clientName = document.getElementById('clientName').value;
+        const value = document.getElementById('value').value;
+        const purchaseDate = document.getElementById('purchaseDate').value;
+        const productName = document.getElementById('productName').value;
+        const presentation_id = document.getElementById('Presentation_id').value;
+        const formData = {
+            clientName: clientName,
+            value: value,
+            purchaseDate: purchaseDate,
+            productName: productName,
+            presentation_id: presentation_id
+        };
+
+        fetch('https://n8n.diegoinpe.com/webhook/b778c6f4-44c7-4146-9774-e7df49de8c5a', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                alert('Form submitted successfully!');
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('There was an error submitting the form.');
+            });
+    });
+</script>
+
+
+
+</body>
+</html>
+
+
+<!--
+1KbJu8gkd4ADeKw7FADwc9OcDsdD69nhLcuJfwWesygw
+
+
+
+
+
+
+
+
+
+
+
+-->

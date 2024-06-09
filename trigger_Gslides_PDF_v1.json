@@ -1,0 +1,296 @@
+{
+  "name": "teste - trigger Gslides->PDF_v1",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "=https://www.googleapis.com/drive/v2/files/{{ $('Google Drive1').item.json.id }}/export/ ",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleDriveOAuth2Api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "mimeType",
+              "value": "application/pdf"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "d75b90e9-c00f-412e-8daa-a4599dad7f66",
+      "name": "HTTP Request2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        8520,
+        -20
+      ],
+      "credentials": {
+        "googleSlidesOAuth2Api": {
+          "id": "XNH46ydEI1kewlVW",
+          "name": "Google Slides account"
+        },
+        "googleDriveOAuth2Api": {
+          "id": "5nqHyuU0fEP8MMXI",
+          "name": "Google Drive account_export_pdf"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "={{ \"NF_EXEMPLO - \"}}{{ $('Webhook').item.json[\"body\"][\"clientName\"] }}{{ \" - \" }}{{ $('Webhook').item.json[\"body\"][\"productName\"]}}",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "root",
+          "cachedResultName": "/ (Root folder)"
+        },
+        "options": {}
+      },
+      "id": "0432d498-d24c-4e37-9be8-7fd06c8a00ec",
+      "name": "Google Drive",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        8740,
+        -20
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "5nqHyuU0fEP8MMXI",
+          "name": "Google Drive account_export_pdf"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "replaceText",
+        "presentationId": "={{ $json.id }}",
+        "textUi": {
+          "textValues": [
+            {
+              "replaceText": "={{ $('Webhook').item.json.body.clientName }}",
+              "text": "<<$nome_cliente$>>"
+            },
+            {
+              "replaceText": "={{ $('Webhook').item.json.body.productName }}",
+              "text": "<<$nome_produto$>>"
+            },
+            {
+              "replaceText": "={{ $('Webhook').item.json.body.purchaseDate }}",
+              "text": "<<$data_aquisição$>>  "
+            },
+            {
+              "replaceText": "={{ $('Webhook').item.json.body.value }}",
+              "text": "<<$valor_compra$>>"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "87ef11fe-5547-4bb6-b4c6-a014e43514c4",
+      "name": "Google Slides1",
+      "type": "n8n-nodes-base.googleSlides",
+      "typeVersion": 2,
+      "position": [
+        8280,
+        0
+      ],
+      "credentials": {
+        "googleSlidesOAuth2Api": {
+          "id": "XNH46ydEI1kewlVW",
+          "name": "Google Slides account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "copy",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.body.presentation_id }}",
+          "mode": "id"
+        },
+        "name": "={{ \"NF_EXEMPLO - \"}}{{ $json.body.clientName }}{{ \" - \" }}{{ $json[\"body\"][\"productName\"]}}",
+        "options": {}
+      },
+      "id": "843e3f78-6052-429e-832a-e54ace1da441",
+      "name": "Google Drive1",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        7980,
+        80
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "5nqHyuU0fEP8MMXI",
+          "name": "Google Drive account_export_pdf"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "b778c6f4-44c7-4146-9774-e7df49de8c5a",
+        "options": {}
+      },
+      "id": "5afa1cc7-4627-4143-a218-c5ef642c9b60",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        7760,
+        80
+      ],
+      "webhookId": "b778c6f4-44c7-4146-9774-e7df49de8c5a"
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "n8n.diegoinpe.com",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
+            "content-length": "173",
+            "accept": "*/*",
+            "accept-encoding": "gzip, deflate, br, zstd",
+            "accept-language": "en-US,en;q=0.9,pt-BR;q=0.8,pt;q=0.7",
+            "content-type": "application/json",
+            "dnt": "1",
+            "origin": "null",
+            "priority": "u=1, i",
+            "sec-ch-ua": "\"Google Chrome\";v=\"125\", \"Chromium\";v=\"125\", \"Not.A/Brand\";v=\"24\"",
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": "\"Windows\"",
+            "sec-fetch-dest": "empty",
+            "sec-fetch-mode": "cors",
+            "sec-fetch-site": "cross-site",
+            "x-forwarded-for": "189.29.147.30",
+            "x-forwarded-host": "n8n.diegoinpe.com",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "b58b1a2fc00a",
+            "x-real-ip": "189.29.147.30"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "clientName": "teste_prod7",
+            "value": "999",
+            "purchaseDate": "2024-05-20",
+            "productName": "cange_simples9meses",
+            "presentation_id": "1KbJu8gkd4ADeKw7FADwc9OcDsdD69nhLcuJfwWesygw"
+          },
+          "webhookUrl": "https://n8n.diegoinpe.com/webhook-test/b778c6f4-44c7-4146-9774-e7df49de8c5a",
+          "executionMode": "test"
+        }
+      }
+    ],
+    "Google Drive1": [
+      {
+        "json": {
+          "kind": "drive#file",
+          "id": "1I-pMtNkM-HvDFryhcoabe7ei0gBQIS56-Ix2r_htBKM",
+          "name": "NF_EXEMPLO - teste_prod7 - cange_simples9meses",
+          "mimeType": "application/vnd.google-apps.presentation"
+        }
+      }
+    ],
+    "Google Slides1": [
+      {
+        "json": {
+          "presentationId": "1I-pMtNkM-HvDFryhcoabe7ei0gBQIS56-Ix2r_htBKM",
+          "replies": [
+            {
+              "replaceAllText": {
+                "occurrencesChanged": 1
+              }
+            },
+            {
+              "replaceAllText": {
+                "occurrencesChanged": 1
+              }
+            },
+            {
+              "replaceAllText": {
+                "occurrencesChanged": 1
+              }
+            },
+            {
+              "replaceAllText": {
+                "occurrencesChanged": 1
+              }
+            }
+          ],
+          "writeControl": {
+            "requiredRevisionId": "RNjc4uP2Gf7Ujw"
+          }
+        }
+      }
+    ]
+  },
+  "connections": {
+    "HTTP Request2": {
+      "main": [
+        [
+          {
+            "node": "Google Drive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Slides1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive1": {
+      "main": [
+        [
+          {
+            "node": "Google Slides1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Google Drive1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "ddc2766e-c166-4d00-8eb8-09f7c23eaba0",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "223194d1db38058a546697ae01dc71e6654bf09df204791a8e355d17e6188e5e"
+  },
+  "id": "5pW2nhUzOtPnLX39",
+  "tags": []
+}
